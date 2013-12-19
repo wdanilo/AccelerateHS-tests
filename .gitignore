@@ -1,0 +1,55 @@
+*.o
+*.hi
+*.chi
+*.chs.h
+.virthualenv
+*~
+*.imports
+tools/batch-clients/tcp-cpp/main
+tools/batch-clients/zmq-cpp/main
+out
+
+#generated files
+gen
+tools/batch-clients/tcp-cpp/generated
+tools/batch-clients/zmq-cpp/generated
+
+# luna library files
+*.node
+*.graph
+
+# emacs backup files
+.\#*
+\#*\#
+
+# eclipse files
+.dist-buildwrapper/
+.project
+.settings
+
+# haste compilation files
+*.jsmod
+
+# python files
+*.py[cod]
+
+# jester
+.jester
+
+#IntelliJ IDEA
+.idea
+
+# cabal configs - they should be generated from tcabal files
+libs/*/*.cabal
+tools/*/*.cabal
+
+#general builds
+dist
+
+# cabal sandbox
+cabal.sandbox.config
+.cabal-sandbox
+.build.config
+
+### DEPRECATED ###
+# cabal-dev
