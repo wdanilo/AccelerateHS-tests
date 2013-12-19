@@ -29,22 +29,9 @@ import           System.TimeIt                 (timeIt)
 import           Data.Array.Repa.Eval          (Target)
 import           Data.Word                     (Word8)
 
-import qualified Graphics.Raster.Image    as Image
-import qualified Graphics.Raster.Image.IO as Image
-import           Graphics.Raster.Image    (Image)
-import qualified Graphics.Raster.Channel  as Channel
-import           Graphics.Raster.Channel  (Channel)
-
 import qualified Data.Array.Repa.Eval           as R
 
 import Data.Bits ((.&.))
-
-
-import Control.Monad.Trans.Either (runEitherT, hoistEither)
-
-
-imgtest :: Image A.Word32 -> Either Image.Error (Image A.Word32)
-imgtest img = Image.composeRGBA =<< Image.decomposeRGBA img
 
 
 main :: IO ()
@@ -59,19 +46,20 @@ main
 
         let backend     = Label.get Cfg.configBackend conf
 
-        img2 <- either (\_ -> mempty) id `fmap` Image.readImageFromBMP' fileIn
-        let img3 = imgtest img2
+        aimg <- either (error . show) id `fmap` A.readImageFromBMP fileIn
+        let myimg = aimg
+            Right myimg2 = (decomposeRGBA (A.use myimg) >>= composeRGBA) 
 
-        --print "---"
-        --print img2
-        --print "---"
-        --print $ fmap (Image.compute (ParseArgs.run backend)) $ Image.decomposeRGBA img2
-        print "---"
-        print $ fmap (Image.compute (ParseArgs.run backend)) $ (Image.composeRGBA =<< Image.decomposeRGBA img2)
+        A.writeImageToBMP fileOut (ParseArgs.run backend myimg2)
+        return ()
 
-        case img3 of 
-            Left  err -> print err
-            Right val -> do Image.writeImageToBMP' (ParseArgs.run backend) fileOut val
-                            return ()
 
-       
+decomposeRGBA chan = do 
+                       let dchan = A.map A.unpackRGBA32 chan
+                           (r,g,b,a) = A.unzip4 dchan
+                       return (r,g,b,a)
+
+composeRGBA (r,g,b,a) = do
+                     let rgba = A.map A.packRGBA32 (A.zip4 r g b a)
+                     return $ rgba
+

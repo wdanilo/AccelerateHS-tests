@@ -39,43 +39,6 @@ Flag hashcat
 Flag fft
 
 
-Library
-  Hs-Source-Dirs: src
-  GHC-Options:    -Wall -O2
-  Extensions:     DoAndIfThenElse,
-                  OverloadedStrings
-
-  Exposed-modules: 
-        Graphics.Raster.Channel,
-        Graphics.Raster.Image,
-        Graphics.Raster.Image.IO
-
-  Build-Depends:  containers,
-                  lens,
-                  bmp,
-                  repa-devil,
-                  accelerate              == 0.14.*,
-                  accelerate-io           == 0.14.*,
-                  base                    == 4.6.*,
-                  criterion               >= 0.5          && < 0.9,
-                  either,
-                  errors,
-                  fclabels                >= 2.0          && < 2.1,
-                  repa                    >= 3.1          && < 3.3,
-                  repa-io                 >= 3.1          && < 3.3,
-                  vector                  >= 0.7          && < 0.11,
-                  timeit,
-                  transformers
-
-  if flag(cuda)
-    CPP-options:        -DACCELERATE_CUDA_BACKEND
-    build-depends:      accelerate-cuda         == 0.14.*
-
-  if flag(opencl)
-    CPP-options:        -DACCELERATE_OPENCL_BACKEND
-    build-depends:      accelerate-opencl       == 0.1.*
-
-
 Executable test
   Main-is:              Main.hs
 
@@ -112,7 +75,6 @@ Executable test
                       either,
                       errors,
                       fclabels                >= 2.0          && < 2.1,
-                      lib-graphics,
                       repa                    >= 3.1          && < 3.3,
                       repa-io                 >= 3.1          && < 3.3,
                       vector                  >= 0.7          && < 0.11,
